@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 
+		데이터베이스와 연결된 Connection을 제공하는 Connection Pool 구현객체를 스프링 컨테이너에 등록시키기
+	 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+		<property name="username" value="hr"></property>
+		<property name="password" value="zxcv1234"></property>
+	</bean>
+
+	<!-- 
+		mybatis의 핵심객체(SqlSessionFactory)를 스프링 컨테이너에 등록시키기
+		
+		+ SqlSessionFactory는 SqlSession객체를 제공하는 객체다.
+		+ SqlSession은 INSERT, UPDATE, DELETE, SELECT 문을 실행하는 메소드와
+		  mapper 인터페이스와 mapper xml 파일을 이용해서 mapper 인스턴스(mapper 인터페이스를 구현한 객체)를 생성하는 메소드를 제공하는 객체다.
+		  
+		  configLocation은 mybatis 환경설정파일의 경로를 지정한다.
+		  mapperLocation은 매핑된 SQL 구문이 정의된 XML 파일의 경로를 지정한다.
+	 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:/mybatis/mybatis-config.xml"></property>
+		<property name="mapperLocations" value="classpath:/mybatis/mappers/*.xml"></property>
+	</bean>
+	
+	<!-- 
+		@Mapper 어노테이션이 부착된 mapper 인터페이스를 전부 스캔해서 mapper 인스턴스(mapper 인터페이스를 구현한 객체)를 생성하고 스프링 컨테이너에 등록시키기
+		
+		base-package는 mapper 인터페이스(com.sample.dao.BookDao 등)가 정의된 패키지를 지정한다.
+		factory-ref는 mybatis의 핵심객체(SqlSessionFactory 객체)의 빈 아이디를 지정한다.
+	 -->
+	<mybatis-spring:scan base-package="com.sample.dao" factory-ref="sqlSessionFactory"/>
+	
+	
+	<!-- 
+		@Autowired, @Resource, @PostConstructor, @PreDestroy 등의 어노테이션을 감지해서 적절한 작업을 수행하는 객체들을 스프링 컨테이너에 등록시킨다.
+	 -->
+	<context:annotation-config />
+	
+	<!-- 
+		@Component, @Controller, @RestController, @ControllerAdvice, @Repository, @Service, @Configuration 등의 어노테이션이 부착된
+		클래스를 지정된 패키지 및 그 하위 패키지에서 전부 스캔해서 스프링 컨테이너에 등록시킨다.
+	 -->
+	<context:component-scan base-package="com.sample.service" />
+
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app.xsd">
+	
+	<!-- 
+		요청객체에 대한 캐릭터 인코딩방식을 UTF-8로 지정하는 필터다.
+		클라이언트의 요청이 올때마다 이 필터의 doFilter() 메소드가 실행되고,
+		doFilter()메소드에서 request.setCharacterEncoding("utf-8")를 실행한다.
+		
+		요청파라미터에 포함된 값을 조회했을 때 한글이 깨지지 않게 한다.
+	 -->
+	<filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+    
+    <!-- 
+    	Root Spring Container 생성을 위한 설정 시작 
+    	- Root Spring Container에서 관리하는 주요 객체
+    		+ Connection Pool
+    		+ Database Access에 필요한 객체(JdbcTemplate, xxxDaoImpl)
+    		+ 업무로직 실행에 필요한 객체(xxxServiceImpl)
+    		+ 선언적 트랜잭션처리를 지원하는 객체
+    		* HTTP 요청을 직접 처리하지 않는 객체들이 생성/조립/보관된다.	
+    	- Root Spring Container를 생성하는 주체
+    		+ ContextLoaderListener다. ContextLoaderListener은 ServletContextListener 인터페이스를 구현한 클래스다.
+    		* ServletContextListener 인터페이스의 메소드(contextInitialized메소드, contextDestroyed메소드)들은 
+    		  각각 서버가 시작될 때, 서버가 종료될 때 실행된다.
+    		* ContextLoaderListener가 재정의한 contextInitialized메소드에서는 Root Spring Container를 생성하고
+    		  <context-param />태그에 설정된 스프링 빈 설정파일을 읽어서 객체를 생성/조립/보관한다.    	
+    -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/context-root.xml</param-value>
+	</context-param> 
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- Root Spring Container 생성을 위한 설정 끝 -->
+	
+	<!-- Child Spring Container 생성을 위한 설정 시작 -->
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/context-web.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<!-- Child Spring Container 생성을 위한 설정 끝 -->
+	
+	<!-- 
+		모든 jsp 페이지의 맨 앞부분과 맨 뒷부분에 지정된 jsp의 내용을 추가하기
+		
+		<jsp-config> 			jsp에 관련된 설정의 정의하기위한 태그
+		<jsp-property-group> 	jsp와 관련 된 설정의 하나의 그룹으로 지정하기 위한 태그
+		<url-pattern> 			설정을 적용할 대상을 지정하는 태그
+		<include-prelude> 		적용대상 jsp 페이지의 맨 앞부분에 include할 jsp를 지정한다.
+		<include-coda> 			적용대상 jsp 페이지의 맨 뒷부분에 include할 jsp를 지정한다.
+	 -->
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<include-prelude>/WEB-INF/jsp/common/tags.jsp</include-prelude>
+		</jsp-property-group>
+	</jsp-config>
+	
+</web-app>

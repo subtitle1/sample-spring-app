@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 
+		spring webmvc 관련 어노테이션을 감지하고, 적절한 처리를 수행한 객체가 스프링 컨테이너에 등록된다.
+	 -->
+	<mvc:annotation-driven />
+	
+	<!-- 
+		컨트롤러의 요청핸들러 메소드가 반환하는 뷰페이지 경로 앞에 "/WEB-INF/jsp/"를 추가한다.
+	 -->
+	<mvc:view-resolvers>
+		<mvc:jsp prefix="/WEB-INF/jsp/" suffix=""/>
+	</mvc:view-resolvers>
+	
+	<context:component-scan base-package="com.sample.controller"></context:component-scan>
+	
+	
+
+</beans>
