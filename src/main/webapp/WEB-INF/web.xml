@@ -48,17 +48,29 @@
 	<!-- Root Spring Container 생성을 위한 설정 끝 -->
 	
 	<!-- Child Spring Container 생성을 위한 설정 시작 -->
+	<!-- 디스패쳐 서블릿을 action이란 이름으로 Tomcat 웹서버에 배포한다. (web.xml 경로에 있다는 것을 알려줌) -->
 	<servlet>
-		<servlet-name>action</servlet-name>
+		<servlet-name>bookstore</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 
+			init-param로 설정된 설정정보는 서블릿에서 조회할 수 있다. 서블릿에게 값을 전달하고 싶을 때 사용한다.
+			contextConfigLocation라는 이름으로 스프링 빈 설정파일의 경로를 지정하면 
+			dispatcherServlet이 스프링 컨테이너를 생성하고, 빈 설정파일을 읽어서 객체를 생성/조립/보관하게 한다.
+		 -->
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/context-web.xml</param-value>
 		</init-param>
+		<!-- 
+			톰캣 웹서버가 시작되면 DispatcherServlet 객체를 생성하고, 초기화작업을 수행해서 요청을 처리할 수 있는 상태가 되게 한다.
+		 -->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<!-- 
+		Tomcat 웹서버에 *.do 패턴의 클라이언트 요청이 오면, action이라는 이름으로 배포된 서블릿이 그 요청을 처리한다.
+	 -->
 	<servlet-mapping>
-		<servlet-name>action</servlet-name>
+		<servlet-name>bookstore</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 	<!-- Child Spring Container 생성을 위한 설정 끝 -->

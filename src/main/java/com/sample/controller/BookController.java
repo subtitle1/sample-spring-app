@@ -1,5 +1,10 @@
 package com.sample.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -8,11 +13,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.form.BookInsertForm;
@@ -20,6 +27,7 @@ import com.sample.form.Criteria;
 import com.sample.pagination.Pagination;
 import com.sample.service.BookService;
 import com.sample.vo.Book;
+import com.sample.vo.BookPicture;
 
 @Controller
 @RequestMapping("/book")
@@ -37,12 +45,43 @@ public class BookController {
 	}
 	
 	@PostMapping("/insert.do")
-	public String save(BookInsertForm form) {
+	public String save(BookInsertForm form) throws IOException {
+		String saveDirectory = "D:\\중앙HTA\\spring-workspace\\spring-mybatis\\src\\main\\webapp\\resources\\images";
+		
 		logger.debug("입력폼 정보: " + form);
 		
+		List<BookPicture> bookPictures = new ArrayList<>();
+		
+		List<MultipartFile> upfiles = form.getUpfiles();
+		for (MultipartFile multipartFile : upfiles) {
+			// MultipartFile의 isEmpty() 메소드는 해당 객체에 첨부파일 정보가 없으면 true를 반환한다.
+			if (!multipartFile.isEmpty()) {		
+				// Multipartfile 객체에서 업로드된 첨부파일의 이름을 조회한다.
+				String filename = multipartFile.getOriginalFilename();
+				// 책의 사진정보를 저장하는 BookPicture 객체를 생성하고, 첨부파일 이름을 저장한다.
+				BookPicture bookPicture = new BookPicture();
+				bookPicture.setPicture(filename);
+				
+				bookPictures.add(bookPicture);
+				
+				// 업로드된 첨부파일을 프로젝트의 images 폴더에 저장하기
+				// MultipartFile 객체는 임시 디렉토리에 임시파일 상태로 저장된 첨부파일을 읽어오는 스트립을 제공한다.
+				InputStream in = multipartFile.getInputStream();
+				
+				// 지정된 폴더에 첨부파일명으로 파일을 출력하는 스트립 생성하기
+				FileOutputStream out = new FileOutputStream(new File(saveDirectory, filename));
+
+				// DB에는 파일이름만 저장됨
+				FileCopyUtils.copy(in, out);
+			}
+		}
+		
 		Book book = new Book();
+		// BookInsertForm 객체의 멤버변수에 저장된 값을 Book 객체의 멤버변수에 복사한다.
+		// 멤버변수의 타입과 멤버변수의 이름이 일치하는 값이 복사되며, 이름은 같은데 타입이 서로 다르면 예외가 발생한다.
 		BeanUtils.copyProperties(form, book);
-		bookService.addNewBook(book);		
+		// 책 정보와 책 사진 정보를 서비스 메소드에 전달해서 저장시킨다.
+		bookService.addNewBook(book, bookPictures);		
 		
 		return "redirect:list.do";
 	}

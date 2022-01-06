@@ -22,7 +22,11 @@
 	<div class="row mb-3">
 		<div class="col">
 			<p>등록할 책정보를 폼에 입력하세요</p>
-			<form class="border bg-light p-3" method="post" action="insert.do">
+			<!-- 
+				폼 입력요소에 <input type="file" />인 입력요소(첨부파일 업로드)가 있을 경우,
+				반드시 method="post" enctype="multipart/form-data"로 설정한다.
+			 -->
+			<form class="border bg-light p-3" method="post" action="insert.do" enctype="multipart/form-data">
 				<div class="mb-3">
 					<label class="form-label">제목</label>
 					<input type="text" class="form-control" name="title" />
@@ -50,6 +54,18 @@
 				<div class="mb-3">
 					<label class="form-label">입고수량</label>
 					<input type="number" class="form-control" name="stock" min="1" max="100" value="1"/>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">책 사진</label>
+					<input type="file" class="form-control" name="upfiles"/>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">책 사진</label>
+					<input type="file" class="form-control" name="upfiles"/>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">책 사진</label>
+					<input type="file" class="form-control" name="upfiles"/>
 				</div>
 				<div class="text-end">
 					<a href="list.do" class="btn btn-secondary">취소</a>

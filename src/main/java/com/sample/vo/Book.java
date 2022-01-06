@@ -2,6 +2,8 @@ package com.sample.vo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Book {
 
 	private int no;
@@ -10,9 +12,12 @@ public class Book {
 	private String publisher;
 	private int price;
 	private int discountPrice;
+	@JsonFormat(pattern = "yyyy년 M월 d일")
 	private Date pubDate;
 	private int stock;
+	@JsonFormat(pattern = "yyyy년 M월 d일")
 	private Date updatedDate;
+	@JsonFormat(pattern = "yyyy년 M월 d일")
 	private Date createdDate;
 	
 	public Book() {}
