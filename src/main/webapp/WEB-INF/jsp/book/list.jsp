@@ -47,21 +47,22 @@
 	<div class="row mb-3">
 		<div class="col">
 			<p>최신 도서 목록을 표시합니다</p>
-			<table class="table">
+			<table class="table" id="table-books-list">
 				<thead>
 					<tr>
 						<th style="width: 10%;">순번</th>
-						<th style="width: 45%;">제목</th>
+						<th style="width: 35%;">제목</th>
 						<th style="width: 15%;">저자</th>
 						<th style="width: 15%;" class="text-end pe-3">가격</th>
 						<th style="width: 15%;" class="text-end pe-3">할인가격</th>
+						<th style="width: 10%;"></th>
 					</tr>
 				</thead>
 				<tbody>
 				<c:choose>
 					<c:when test="${empty books }">
 						<tr>
-							<td class="text-center" colspan="5">등록된 도서 정보가 없습니다.</td>
+							<td class="text-center" colspan="6">등록된 도서 정보가 없습니다.</td>
 						</tr>
 					</c:when>
 					<c:otherwise>
@@ -72,6 +73,7 @@
 								<td>${book.author }</td>
 								<td class="text-end pe-3"><fmt:formatNumber value="${book.price }" pattern="##,###"/> 원</td>
 								<td class="text-end pe-3"><strong class="text-danger"><fmt:formatNumber value="${book.discountPrice }" pattern="##,###"/></strong> 원</td>
+								<td class="text-center"><button class="btn btn-outline-primary btn-sm" data-book-no="${book.no }">장바구니</button></td>
 							</tr>
 						</c:forEach>
 					</c:otherwise>
@@ -121,6 +123,28 @@
 	});
 	*/
 	
+	// 장바구니 담기
+	$("#table-books-list .btn-outline-primary").click(function() {
+		var bookNo = $(this).attr("data-book-no");
+		
+		/*
+			장바구니 담기가 성공했을 때의 응답 데이터
+			response = {"status":"OK", "error":null, "items":[5]}
+		
+			장바구니 담기가 실패했을 때의 응답 데이터
+			response = {"status":"OK", "error":"동일한 상품이 이미 저장되어 있습니다", "items":null}
+		*/
+		$.getJSON("/rest/cart/add.do", {bookNo:bookNo}, function(response) {
+			if (response.status == "OK") {
+				// 장바구니 메뉴의 개수를 갱신한다.
+				$("#span-item-count").text(response.items[0]);
+				alert("장바구니에 저장되었습니다.");
+			} else {
+				alert(response.error);
+			}
+		});
+	})
+	
 	// 검색버튼을 클릭했을 때 실행될 이벤트핸들러 함수를 등록한다.
 	$("#btn-search-book").click(function() {
 		// 검색옵션값과 입력값을 조회한다.
@@ -148,6 +172,8 @@
 		// 검색폼에 onsubmit 이벤트 발생시키기
 		$("#form-search-book").trigger("submit");
 	})
+	
+	
 </script>
 </body>
 </html>

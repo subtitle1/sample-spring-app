@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.sample.dao.BookDao;
 import com.sample.form.Criteria;
 import com.sample.vo.Book;
+import com.sample.vo.BookPicture;
 
 @Service
 public class BookService {
@@ -27,7 +28,7 @@ public class BookService {
 		return bookDao.searchBooks(criteria);
 	}
 	
-	public void addNewBook(Book book) {
+	public void addNewBook(Book book, List<BookPicture> bookPictures) {
 		bookDao.insertBook(book);
 	}
 	

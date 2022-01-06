@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sample.dao.CartItemDao">
+
+	<insert id="insertCartItem" parameterType="com.sample.vo.CartItem">
+		insert into sample_spring_book_cart_items
+		(item_no, user_no, book_no)
+		values
+		(cart_item_seq.nextval, #{userNo}, #{bookNo})
+	</insert>
+	
+	<delete id="deleteCartItem" parameterType="int">
+		delete from sample_spring_book_cart_items
+		where item_no = #{value}
+	</delete>
+	
+	<select id="getCartItemsByUserNo" parameterType="int" resultType="com.sample.dto.CartItemDto">
+		select 
+			A.item_no as itemNo,
+			B.book_no as bookNo,
+			B.book_title as title,
+			B.book_publisher as publisher,
+			B.book_price as price,
+			B.book_discount_price as discountPrice
+		from 
+			sample_spring_book_cart_items A, sample_spring_books B
+		where 
+			A.book_no = B.book_no
+			and A.user_no = #{value}
+	</select>
+	
+	<select id="getCartItemByNo" parameterType="int" resultType="com.sample.vo.CartItem">
+		select 
+			item_no as no,
+			user_no as userNo,
+			book_no as bookNo
+		from 
+			sample_spring_book_cart_items 
+		where 
+			item_no = #{value}
+	</select>
+</mapper>
