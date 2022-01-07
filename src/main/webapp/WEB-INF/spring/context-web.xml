@@ -22,8 +22,19 @@
 	<!-- 
 		@Controller, @RestController 어노테이션이 부착된 클래스를 스캔해서 스프링 컨테이너의 빈으로 등록시킨다.
 	 -->
-	<context:component-scan base-package="com.sample.controller"></context:component-scan>
+	<!-- <context:component-scan base-package="com.sample.controller"></context:component-scan>
 	<context:component-scan base-package="com.sample.restcontroller"></context:component-scan>
+	<context:component-scan base-package="com.sample.exceptionhandler"></context:component-scan> -->
+	
+	<context:component-scan base-package="com.sample">
+		<!-- 스캔 대상에 포함시키는 어노테이션 -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+		<!-- 스캔 대상에서 제외시키는 어노테이션 -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+	</context:component-scan>
 	
 	<!-- 
 		첨부파일 업로드 요청(Multipart 요청)을 처리하는 MultipartResolver 인터페이스의 구현객체를 스프링 컨테이너의 빈으로 등록시킨다.

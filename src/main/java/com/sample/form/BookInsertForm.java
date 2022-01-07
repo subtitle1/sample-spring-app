@@ -13,6 +13,8 @@ public class BookInsertForm {
 	private String publisher;
 	private int price;
 	private int discountPrice;
+	// @DateTimeFormat
+	// 입력필드에서 선택 혹은 입력한 날짜형식과 같은 형식으로 패턴을 정의하면 요청 파라미터에서 값을 조회해서 java.util.Date 타입으로 변환 후 pubDate에 저장시킨다.
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date pubDate;
 	private int stock;

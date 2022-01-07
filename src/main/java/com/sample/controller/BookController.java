@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sample.dto.BookDetailDto;
 import com.sample.form.BookInsertForm;
 import com.sample.form.Criteria;
 import com.sample.pagination.Pagination;
@@ -52,7 +53,19 @@ public class BookController {
 		
 		List<BookPicture> bookPictures = new ArrayList<>();
 		
+		// 업로드된 첨부파일을 지정된 폴더에 저장하고, BookPicture 객체를 생성해서 파일명을 저장한다.
+		// 생성된 BookPicture객체를 List에 저장한다.
+		/*
+		 * MultipartFile
+		 * 		- 첨부파일 업로드를 지원하는 객체다.
+		 * 		- 첨부파일 선택필드 하나 당 MultiFile 객체가 하나씩 생성된다.
+		 * 		- 폼의 첨부파일 선택 필드에서 첨부파일을 선택하지 않아도 해당 필드에 대한 MultipartFile객체는 생성된다.
+		 * 		- MultipartFile의 주요 API
+		 * 			- boolean
+		 * 	
+		 */
 		List<MultipartFile> upfiles = form.getUpfiles();
+		
 		for (MultipartFile multipartFile : upfiles) {
 			// MultipartFile의 isEmpty() 메소드는 해당 객체에 첨부파일 정보가 없으면 true를 반환한다.
 			if (!multipartFile.isEmpty()) {		
@@ -62,6 +75,7 @@ public class BookController {
 				BookPicture bookPicture = new BookPicture();
 				bookPicture.setPicture(filename);
 				
+				// 생성된 BookPicture 객체를 List객체에 저장한다.
 				bookPictures.add(bookPicture);
 				
 				// 업로드된 첨부파일을 프로젝트의 images 폴더에 저장하기
@@ -72,6 +86,8 @@ public class BookController {
 				FileOutputStream out = new FileOutputStream(new File(saveDirectory, filename));
 
 				// DB에는 파일이름만 저장됨
+				// spring에서 제공하는 FileCopyUtils를 사용해서
+				// temp 폴더에 임시파일로 저장되어 있는 첨부파일을 읽어서 src/main/resources/images 폴더로 복사한다.
 				FileCopyUtils.copy(in, out);
 			}
 		}
@@ -131,8 +147,8 @@ public class BookController {
 	 */
 	@GetMapping("/detail.do")
 	public String detail(int no, Model model) {
-		Book book = bookService.getBookDetail(no);
-		model.addAttribute("book", book);
+		BookDetailDto dto = bookService.getBookDetailwithPicture(no);
+		model.addAttribute("book", dto);
 		
 		return "book/detail.jsp";
 	}

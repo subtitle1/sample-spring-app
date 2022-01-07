@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.sample.exception.LoginErrorException;
 import com.sample.service.UserService;
 import com.sample.util.SessionUtils;
 import com.sample.vo.User;
@@ -61,33 +62,17 @@ public class HomeController {
 	}
 	
 	@PostMapping("/login.do")
-	public String login(String id, String password, Model model) {
+	public String login(String id, String password) {
 		// 아이디와 비밀번호가 비어있거나 공백만 있으면 loginform.jsp로 내부이동
 		if (!StringUtils.hasText(id) || !StringUtils.hasText(password)) {
-			model.addAttribute("error", "아이디와 비밀번호는 필수입력값입니다.");
-			return "loginform.jsp";
+			throw new LoginErrorException("아이디와 비밀번호는 필수 입력값입니다.");
 		}
 		
-		try {
-			// 사용자 인증서비스 호출
-			User user = userService.login(id, password);
-			
-			/*
-				// @SessionAttributes(name = {"LOGIN_USER"}) 설정은 모델에 "LOGIN_USER"라는 이름으로 저장되는 객체를
-				// HttpSession에 저장시킨다. 즉, 인증된 사용자 정보가 HttpSession 객체에 저장된 것이다.
-				// model.addAttribute("LOGIN_USER", user);
-			*/
-			
-			SessionUtils.addAttribute("LOGIN_USER", user);
-			return "redirect:home.do";
-			
-		} catch (RuntimeException e) {
-			// 사용자 인증과정에서 예외가 발생하면 loginform.jsp로 내부이동
-			model.addAttribute("error", e.getMessage());
-			return "loginform.jsp";
-		}
+		User user = userService.login(id, password);
+		SessionUtils.addAttribute("LOGIN_USER", user);
+		return "redirect:home.do";
+
 	}
-	
 	
 	/*
 	 * @GetMapping("logout.do") public String logout(SessionStatus sessionStatus) {

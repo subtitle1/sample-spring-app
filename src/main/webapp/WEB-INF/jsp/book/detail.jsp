@@ -21,7 +21,22 @@
 	</div>
 	<div class="row-mb-3">
 		<div class="col">
-		<p>책정보 : ${boook }</p>
+			<!-- 
+				BookDetailDto 객체의 List<BookPicture> bookPictures; 프로퍼티에 책 사진 정보가 있는지 확인하고, 있으면 태그를 출력한다.
+			 -->
+			<c:if test="${not empty book.bookPictures }">
+				<div class="row mb-3 border p-3">
+					<!-- 
+						BookDetailDto 객체의 List<BookPictures> bookPictures; 프로퍼티는 책 사진정보가 여러 개 저장된 객체이기 때문에 forEach 태그 사용
+					 -->
+					<c:forEach var="bookPicture" items="${book.bookPictures }">
+						<div class="col-2">	
+							<!-- bookPicture VO 안에 사진으로 저장된 프로퍼티명이 picture이기 때문에 picture 정의 -->
+							<img src="/resources/images/${bookPicture.picture }" class="img-thumbnail">
+						</div>
+					</c:forEach>
+				</div>
+			</c:if>
 			<table class="table">
 				<tbody>
 					<tr>

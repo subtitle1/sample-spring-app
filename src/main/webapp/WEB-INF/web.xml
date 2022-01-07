@@ -91,4 +91,32 @@
 		</jsp-property-group>
 	</jsp-config>
 	
+	<!-- 
+		에러페이지 설정 
+		<error-page>
+			<error-code>HTTP 응답 코드</error-code>
+			<location>에러페이지경로 및 파일명</location>
+		</error-page>
+		
+		<error-page>
+			<exception-type>예외클래스의 패키지를 포함한 전체 경로</exception-type>
+			<location>에러페이지경로 및 파일명</location>
+		</error-page>
+	-->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/jsp/error/notFound.jsp</location>
+	</error-page>
+	
+	<!-- 
+		스프링에서는 DB 오류가 발생하면 DataAccessException이 발생한다.
+	 -->
+	<!-- <error-page>
+		<exception-type>org.springframework.dao.DataAccessException</exception-type>
+		<location>/WEB-INF/jsp/error/databaseError.jsp</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.loang.Exception</exception-type>
+		<location>/WEB-INF/jsp/error/unknownError.jsp</location>
+	</error-page> -->
 </web-app>
