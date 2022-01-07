@@ -53,7 +53,7 @@
 				</div>
 				<div class="mb-3">
 					<label class="form-label">입고수량</label>
-					<input type="number" class="form-control" name="stock" min="1" max="100" value="1"/>
+					<input type="number" class="form-control" name="stock" value="1"/>
 				</div>
 				<div class="mb-3">
 					<label class="form-label">책 사진</label>

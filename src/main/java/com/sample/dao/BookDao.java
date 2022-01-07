@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.sample.form.Criteria;
 import com.sample.vo.Book;
+import com.sample.vo.BookPicture;
 
 @Mapper
 public interface BookDao {
@@ -20,4 +21,6 @@ public interface BookDao {
 	List<Book> searchBooksByPrice(@Param("minPrice") int minPrice, @Param("maxPrice") int maxPrice);
 	Book getBookByNo(int no);
 	
+	void insertBookPicture(BookPicture bookPicture);
+	List<BookPicture> getBookPicturesByBookNo(int bookNo);
 }
