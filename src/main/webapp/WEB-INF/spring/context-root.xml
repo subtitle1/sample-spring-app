@@ -3,9 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- 
 		데이터베이스와 연결된 Connection을 제공하는 Connection Pool 구현객체를 스프링 컨테이너에 등록시키기
@@ -16,6 +18,31 @@
 		<property name="username" value="hr"></property>
 		<property name="password" value="zxcv1234"></property>
 	</bean>
+	
+	<!-- 
+		선언적 트랜잭션 처리를 지원하는 트랜잭션 매니저 객체를 스프링 컨테이너에 등록시키기
+			spring-jdbc, ibatis, mybatis를 사용해서 데이터베이스 엑세스를 구현한 경우 
+				- DataSourceTransactionManager를 스프링 컨테이너에 빈으로 등록시킨다.
+			
+	 -->
+	 <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	 	<property name="dataSource" ref="dataSource"></property>
+	 </bean>
+	 
+	 <!-- 
+	 	- @Transactional 어노테이션을 활성화해서 @Transactional이 부착된 객체의 모든 메소드가 실행될 때마다 스프링이 트랜잭션 처리를 지원한다.
+	 	- @Transactional 어노테이션은 인터페이스, 클래스, 메소드에 부착할 수 있다.
+	 			- 인터페이스에 부착하면 해당 인터페이스를 구현한 객체의 모든 메소드가 실행될 때마다 트랜잭션 처리가 지원된다.
+	 			- 클래스에 부착하면 해당 클래스로 생성된 객체의 모든 메소드가 실행될 때마다 트랜잭션 처리가 지원된다.
+	 			- 메소드에 부착하면 해당 메소드가 실행될 때마다 트랜잭션 처리가 지원된다.
+	 				- 메소드 > 클래스 > 인터페이스 순으로 우선순위가 높다.
+	 				- 만약, 클래스와 메소드에 @Transactional 어노테이션이 모두 붙어있으면 메소드에 부착된 어노테이션의 설정에 맞게 트랜잭션이 처리된다.
+	 				
+	 	- @Transactional 어노테이션을 이용해서 선언적 트랜잭션 처리가 필요한 객체 혹은 메소드를 지정하게 하고, 해당 메소드가 실행될 때
+	 	- 스프링이 트랜잭션 처리를 지원하게 한다.
+	 	- transaction-manager 속성값은 스프링 컨테이너에 등록시킨 트랜잭션 매니저 객체의 빈 아이디다.
+	  -->
+	  <tx:annotation-driven transaction-manager="txManager"/>
 
 	<!-- 
 		mybatis의 핵심객체(SqlSessionFactory)를 스프링 컨테이너에 등록시키기

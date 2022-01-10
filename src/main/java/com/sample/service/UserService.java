@@ -3,12 +3,14 @@ package com.sample.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sample.dao.UserDao;
 import com.sample.exception.LoginErrorException;
 import com.sample.vo.User;
 
 @Service
+@Transactional
 public class UserService {
 
 	@Autowired

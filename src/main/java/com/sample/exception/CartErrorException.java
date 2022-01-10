@@ -7,5 +7,4 @@ public class CartErrorException extends CustomException {
 	public CartErrorException(String message) {
 		super(message);
 	}
-
 }

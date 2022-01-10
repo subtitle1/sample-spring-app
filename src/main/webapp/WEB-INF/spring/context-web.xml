@@ -10,7 +10,34 @@
 	<!-- 
 		spring webmvc 관련 어노테이션을 감지하고, 적절한 처리를 수행한 객체가 스프링 컨테이너에 등록된다.
 	 -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven >
+		<!-- 사용자정의 HandlerMethodArgumentResolver 빈을 등록한다. -->
+		<mvc:argument-resolvers>
+			<bean class="com.sample.argumentResolver.LoginedUserArgumentResolver"></bean>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+	
+	<mvc:interceptors>
+		<!-- 
+			사용자정의 MethodInterceptor를 빈으로 등록한다.
+		 -->
+		 <!-- 
+		 	웹페이지 요청에 대한 로그인 체크를 담당하는 인터셉터
+		  -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.do"/>
+			<mvc:exclude-mapping path="/rest/**/*.do"/> <!-- 이 요청은 제외됨 -->
+			<bean class="com.sample.interceptor.LoginCheckInterceptor"></bean>
+		</mvc:interceptor>
+		
+		<!-- 
+			ajax 요청에 대한 로그인 체크를 담당하는 인터셉터
+		 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/rest/**/*.do"/>
+			<bean class="com.sample.interceptor.RestLoginCheckInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	
 	<!-- 
 		컨트롤러의 요청핸들러 메소드가 반환하는 뷰페이지 경로 앞에 "/WEB-INF/jsp/"를 추가한다.
@@ -18,6 +45,7 @@
 	<mvc:view-resolvers>
 		<mvc:jsp prefix="/WEB-INF/jsp/" suffix=""/>
 	</mvc:view-resolvers>
+	
 	
 	<!-- 
 		@Controller, @RestController 어노테이션이 부착된 클래스를 스캔해서 스프링 컨테이너의 빈으로 등록시킨다.

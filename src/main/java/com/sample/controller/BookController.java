@@ -60,9 +60,6 @@ public class BookController {
 		 * 		- 첨부파일 업로드를 지원하는 객체다.
 		 * 		- 첨부파일 선택필드 하나 당 MultiFile 객체가 하나씩 생성된다.
 		 * 		- 폼의 첨부파일 선택 필드에서 첨부파일을 선택하지 않아도 해당 필드에 대한 MultipartFile객체는 생성된다.
-		 * 		- MultipartFile의 주요 API
-		 * 			- boolean
-		 * 	
 		 */
 		List<MultipartFile> upfiles = form.getUpfiles();
 		
@@ -70,7 +67,7 @@ public class BookController {
 			// MultipartFile의 isEmpty() 메소드는 해당 객체에 첨부파일 정보가 없으면 true를 반환한다.
 			if (!multipartFile.isEmpty()) {		
 				// Multipartfile 객체에서 업로드된 첨부파일의 이름을 조회한다.
-				String filename = multipartFile.getOriginalFilename();
+				String filename = System.currentTimeMillis() +  multipartFile.getOriginalFilename();
 				// 책의 사진정보를 저장하는 BookPicture 객체를 생성하고, 첨부파일 이름을 저장한다.
 				BookPicture bookPicture = new BookPicture();
 				bookPicture.setPicture(filename);
