@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sample.dao.BookDao;
 import com.sample.dto.BookDetailDto;
@@ -15,6 +16,7 @@ import com.sample.vo.Book;
 import com.sample.vo.BookPicture;
 
 @Service
+@Transactional
 public class BookService {
 	
 	static final Logger logger = LogManager.getLogger(BookService.class);

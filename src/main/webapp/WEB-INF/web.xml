@@ -111,7 +111,8 @@
 	<!-- 
 		스프링에서는 DB 오류가 발생하면 DataAccessException이 발생한다.
 	 -->
-	<!-- <error-page>
+	<!-- 
+	<error-page>
 		<exception-type>org.springframework.dao.DataAccessException</exception-type>
 		<location>/WEB-INF/jsp/error/databaseError.jsp</location>
 	</error-page>
