@@ -1,10 +1,7 @@
 package com.sample.error;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sample.dto.ResponseDto;
 import com.sample.exception.LoginErrorException;
@@ -46,5 +43,5 @@ public class ErrorController {
 		
 		return response;
 	}
-	 */
+	*/
 }

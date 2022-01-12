@@ -50,6 +50,7 @@ public class BookService {
 	}
 	
 	public BookDetailDto getBookDetailwithPicture(int bookNo) {
+		logger.info("책번호: " +bookNo);
 		BookDetailDto dto = new BookDetailDto();
 		
 		Book book = bookDao.getBookByNo(bookNo);
@@ -62,10 +63,12 @@ public class BookService {
 	}
 	
 	public Book getBookDetail(int bookNo) {
+		logger.info("책번호: " +bookNo);
 		return bookDao.getBookByNo(bookNo);
 	}
 	
 	public void updateBookPrice(int bookNo, int price, int discountPrice) {
+		logger.info("책번호: " +bookNo);
 		Book book = bookDao.getBookByNo(bookNo);
 		book.setPrice(price);
 		book.setDiscountPrice(discountPrice);
