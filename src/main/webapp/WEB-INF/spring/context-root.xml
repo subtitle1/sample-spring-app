@@ -4,9 +4,11 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- 
@@ -80,6 +82,12 @@
 	 -->
 	<context:component-scan base-package="com.sample.service" />
 
+	<!-- 
+		Spring AOP(관점지향 프로그래밍) 설정
+	 -->
+	 <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	 <bean class="com.sample.aop.LoggingAdvice"></bean>
+	 <bean class="com.sample.aop.RunningTimeCheckAdvice"></bean>
 </beans>
 
 
