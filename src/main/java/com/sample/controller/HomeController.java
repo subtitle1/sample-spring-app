@@ -86,4 +86,14 @@ public class HomeController {
 		SessionUtils.removeAttrubute("LOGIN_USER");
 		return "redirect:home.do";
 	}
+	
+	@GetMapping("/movie/list.do")
+	public String movieList() {
+		return "/movie/list.jsp";
+	}
+	
+	@GetMapping("/movie/detail.do")
+	public String movieDetail(int id) {
+		return "/movie/detail.jsp";
+	}
 }
