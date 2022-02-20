@@ -16,6 +16,7 @@ public class UserService {
 	@Autowired
 	UserDao userDao;
 	
+	
 	public User login(String id, String password) {
 		// 회원정보
 		User user = userDao.getUserById(id);

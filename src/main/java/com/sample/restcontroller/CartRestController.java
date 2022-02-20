@@ -57,7 +57,6 @@ public class CartRestController {
 		response.setItems(List.of(cartItemsCount));
 		return response;
 	}
-	
 
 	@GetMapping("/delete.do")
 	public ResponseDto<?> delete(@LoginedUser User user, int no) {
